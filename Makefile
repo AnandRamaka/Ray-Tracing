@@ -6,10 +6,12 @@ exec: bin/exec
 tests: bin/tests
 
 bin/exec: src/main.cc
+	mkdir -p bin
 	${CXX} ${CXX_FLAGS} src/main.cc ${SRC_FILES} -o $@
 	./$@
 
 bin/tests: tests/tests.cc
+	mkdir -p bin
 	${CXX} ${CXX_FLAGS} tests/tests.cc ${SRC_FILES} -o $@
 
 
