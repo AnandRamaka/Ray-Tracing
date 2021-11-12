@@ -39,4 +39,6 @@ class Vector3D {
 
 std::ostream& operator<<(std::ostream& os, const Vector3D& vector);
 
+typedef Vector3D Color;
+
 #endif
