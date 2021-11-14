@@ -32,7 +32,8 @@ class Vector3D {
         friend Vector3D operator/(const Vector3D& v, const Vector3D& other);
         friend Vector3D operator/(const Vector3D& v, double t);
         friend Vector3D operator/(double t, const Vector3D& v);
-        
+        friend bool operator==(const Vector3D& v, const Vector3D& other);
+
     private:
         double coordinates_[3];
 };
