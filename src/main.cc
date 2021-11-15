@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
   // Camera definitions
   double viewHeight = 2.0;
   double viewWidth = aspectRatio * viewHeight;
-  double focalLength = 2.0;
+  double focalLength = 4.0;
   Vector3D origin = Vector3D(0, 0, 0); // In camera coords, center is at 0
 
   Camera camera = Camera(viewHeight, viewWidth, focalLength, origin);
@@ -53,7 +53,6 @@ int main(int argc, char *argv[]) {
       auto v = (double)(height - i)/height;
       Ray r = camera.GetRayAt(u, v);
       row.push_back(output(r, hittable_list));
-
     }
     image.push_back(row);
   }
