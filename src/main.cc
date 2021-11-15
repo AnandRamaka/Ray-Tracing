@@ -31,19 +31,22 @@ int main(int argc, char *argv[]) {
 
   // Define hittable objects
   Hittables hittable_list;
-  Sphere s1 = Sphere(Vector3D(-1, 0, -3), 0.5);
-  Sphere s2 = Sphere(Vector3D(1, 0, -3), 0.5);
+  Sphere s1 = Sphere(Vector3D(-1, -1, -3), 0.5);
+  Sphere s2 = Sphere(Vector3D(1, -1, -3), 0.5);
+  Sphere s3 = Sphere(Vector3D(-1, 1, -3), 0.5);
+  Sphere s4 = Sphere(Vector3D(1, 1, -3), 0.5);
 
   hittable_list.Add(&s1);
   hittable_list.Add(&s2);
+  hittable_list.Add(&s3);
+  hittable_list.Add(&s4);
 
   // Camera definitions
-  double viewHeight = 2.0;
-  double viewWidth = aspectRatio * viewHeight;
-  double focalLength = 4.0;
-  Vector3D origin = Vector3D(0, 0, 0); // In camera coords, center is at 0
+  double vertical_fov = 90;
+  Vector3D look_from = Vector3D(0, 0, 0);
+  Vector3D look_at = Vector3D(0, -1, -3);
 
-  Camera camera = Camera(viewHeight, viewWidth, focalLength, origin);
+  Camera camera = Camera(look_from, look_at, vertical_fov, aspectRatio);
 
   for(size_t i = 0; i < height; i++) {
     std::vector<Color> row;
