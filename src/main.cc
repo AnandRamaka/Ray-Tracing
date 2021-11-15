@@ -31,6 +31,7 @@ int main(int argc, char *argv[]) {
 
   // Define hittable objects
   Hittables hittable_list;
+
   Sphere s1 = Sphere(Vector3D(-1, -1, -3), 0.5);
   Sphere s2 = Sphere(Vector3D(1, -1, -3), 0.5);
   Sphere s3 = Sphere(Vector3D(-1, 1, -3), 0.5);
@@ -44,7 +45,7 @@ int main(int argc, char *argv[]) {
   // Camera definitions
   double vertical_fov = 90;
   Vector3D look_from = Vector3D(0, 0, 0);
-  Vector3D look_at = Vector3D(0, -1, -3);
+  Vector3D look_at = Vector3D(0, 0, -3);
 
   Camera camera = Camera(look_from, look_at, vertical_fov, aspectRatio);
 
