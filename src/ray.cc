@@ -8,7 +8,7 @@ Vector3D Ray::GetDirection() const {
     return direction_;
 }
 
-Vector3D Ray::GetAt(double t) {
+Vector3D Ray::GetAt(double t) const {
     return source_ + t * direction_;
 }
 
