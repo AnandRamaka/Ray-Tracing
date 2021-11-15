@@ -11,8 +11,8 @@ public:
     Vector3D GetSource() const;
     Vector3D GetDirection() const;
 
-    Vector3D GetAt(double t);
-    
+    Vector3D GetAt(double t) const;
+
 private:
     Vector3D source_;
     Vector3D direction_;
