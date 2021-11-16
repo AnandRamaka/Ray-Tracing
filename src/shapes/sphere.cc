@@ -23,7 +23,7 @@ bool Sphere::Hit(const Ray& ray, HitRecord& out) const {
         // if( ray.GetDirection().Dot(out.normal) > 0.0 ){
         //     out.normal = -out.normal;
         // }
-        if( !out.front_facing ){
+        if( !out.frontFacing ){
             out.normal = -out.normal;
         }
 

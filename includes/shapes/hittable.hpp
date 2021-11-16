@@ -7,6 +7,7 @@ public:
     Vector3D point;
     Vector3D normal;
     double t;
+    bool frontFacing;
 };
 
 class Hittable {
