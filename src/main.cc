@@ -4,6 +4,7 @@
 #include "writer.hpp"
 #include "shapes/hittables.hpp"
 #include "shapes/sphere.hpp"
+#include "camera.hpp"
 
 Color output(const Ray& r, const Hittables& hittable) {
   // gradient from UIUC orange to blue
@@ -30,22 +31,23 @@ int main(int argc, char *argv[]) {
 
   // Define hittable objects
   Hittables hittable_list;
-  Sphere s1 = Sphere(Vector3D(-1, 0, -3), 0.5);
-  Sphere s2 = Sphere(Vector3D(1, 0, -3), 0.5);
+
+  Sphere s1 = Sphere(Vector3D(0, 0, -1), 0.5);
+  Sphere s2 = Sphere(Vector3D(-2, 0, -1), 0.5);
+  Sphere s3 = Sphere(Vector3D(-1, 0, -1), 0.5);
+  Sphere s4 = Sphere(Vector3D(1, 0, -1), 0.5);
 
   hittable_list.Add(&s1);
   hittable_list.Add(&s2);
-
+  hittable_list.Add(&s3);
+  hittable_list.Add(&s4);
 
   // Camera definitions
-  auto viewHeight = 2.0; // We want to work in camera coords, -1 to 1
-  auto viewWidth = aspectRatio * viewHeight;
-  auto focalLength = 2.0; // this controls the "FOV". Things will get distorted if they move around unless we change this. Distance to camera
+  double vertical_fov = 120;
+  Vector3D look_from = Vector3D(-2, 4, 1);
+  Vector3D look_at = Vector3D(0, 0, -1);
 
-  auto origin = Vector3D(0, 0, 0); // In camera coords, center is at 0
-  auto horizontal = Vector3D(viewWidth, 0, 0);
-  auto vertical = Vector3D(0, viewHeight, 0);
-  auto lower_left = origin - horizontal/2 - vertical/2 - Vector3D(0, 0, focalLength); // lower left corner, focalLength away
+  Camera camera = Camera(look_from, look_at, vertical_fov, aspectRatio);
 
   for(size_t i = 0; i < height; i++) {
     std::vector<Color> row;
@@ -53,9 +55,8 @@ int main(int argc, char *argv[]) {
       auto u = (double)j/width;
       // We want to flip the v coordinate since raytracing starts at the upper left, otherwise it would start at lower left
       auto v = (double)(height - i)/height;
-      Ray r(origin, lower_left + u*horizontal + v*vertical - origin);
+      Ray r = camera.GetRayAt(u, v);
       row.push_back(output(r, hittable_list));
-
     }
     image.push_back(row);
   }
