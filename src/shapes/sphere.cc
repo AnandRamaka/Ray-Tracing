@@ -26,7 +26,7 @@ bool Sphere::Hit(const Ray& ray, HitRecord& out) const {
             out.frontFacing = true;
         }
         if( !out.frontFacing ){
-            // out.normal = -out.normal;
+           out.normal = -out.normal;
         }
 
          // normalize the normal vector
