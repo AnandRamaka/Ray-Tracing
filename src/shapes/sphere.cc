@@ -20,11 +20,13 @@ bool Sphere::Hit(const Ray& ray, HitRecord& out) const {
 
 
         out.normal = (out.point - _loc) / _r;
-        // if( ray.GetDirection().Dot(out.normal) > 0.0 ){
-        //     out.normal = -out.normal;
-        // }
+        if( ray.GetDirection().Dot(out.normal) > 0.0 ){
+            out.frontFacing = false;
+        } else {
+            out.frontFacing = true;
+        }
         if( !out.frontFacing ){
-            out.normal = -out.normal;
+            // out.normal = -out.normal;
         }
 
          // normalize the normal vector
