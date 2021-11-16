@@ -23,6 +23,7 @@ bool Sphere::Hit(const Ray& ray, double min, double max, HitRecord& out) const {
         }
         out.t = t; // t
         out.point = ray.GetAt(t); // point of intersection
+        out.mat = _mat;
 
 
         out.normal = (out.point - _loc) / _r;
