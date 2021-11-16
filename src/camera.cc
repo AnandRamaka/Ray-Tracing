@@ -6,8 +6,8 @@ Camera::Camera(Vector3D point_to_look_from, Vector3D point_to_look_at, double ve
     // The larger the fov, the more of the scene will be present.
 
     double theta = DegreesToRadians(vertical_fov);
-    double z_plane = tan(theta/2);
-    double view_height = 2.0 * z_plane;
+    double height_factor = tan(theta/2);
+    double view_height = height_factor;
     double view_width = aspect_ratio * view_height;
 
     // Allows the camera to be movable. In order to do this, we must find the orthonormal vectors that
