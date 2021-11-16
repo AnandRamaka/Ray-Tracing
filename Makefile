@@ -9,15 +9,15 @@ tests: bin/tests
 
 sphere_tests: bin/sphere_tests
 
-bin/exec: src/main.cc
+bin/exec: src/main.cc ${SRC_FILES}
 	mkdir -p bin
 	${CXX} ${CXX_FLAGS} src/main.cc ${SRC_FILES} -o $@
 
-bin/tests: tests/tests.cc
+bin/tests: tests/tests.cc ${SRC_FILES}
 	mkdir -p bin
 	${CXX} ${CXX_FLAGS} tests/tests.cc ${SRC_FILES} -o $@
 
-bin/sphere_tests: tests/sphere_tests.cc
+bin/sphere_tests: tests/sphere_tests.cc ${SRC_FILES}
 	mkdir -p bin
 	${CXX} ${CXX_FLAGS} tests/sphere_tests.cc ${SRC_FILES} -o $@
 
