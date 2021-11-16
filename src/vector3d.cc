@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include "vector3d.hpp"
+#include "util.hpp"
 
 /* -------- Constructors -------- */
 
@@ -13,6 +14,16 @@ Vector3D::Vector3D(double x, double y, double z) {
 
 Vector3D Vector3D::operator-() const {
     return Vector3D(-coordinates_[0], -coordinates_[1], -coordinates_[2]);
+}
+
+/* -------- Static Constructors -------- */
+
+Vector3D Vector3D::random(double lower, double upper) {
+    return Vector3D(random_range(lower, upper), random_range(lower, upper), random_range(lower, upper));
+}
+
+Vector3D Vector3D::random() {
+    return Vector3D::random(0.0, 1.0);
 }
 
 /* -------- Member Functions -------- */
@@ -71,7 +82,7 @@ Vector3D operator+(const Vector3D& v, const Vector3D& other) {
 }
 
 Vector3D operator-(const Vector3D& v, const Vector3D& other) {
-    return Vector3D(v.coordinates_[0] - other.coordinates_[0], v.coordinates_[1] - other.coordinates_[1], v.coordinates_[2] - other.coordinates_[2]);   
+    return Vector3D(v.coordinates_[0] - other.coordinates_[0], v.coordinates_[1] - other.coordinates_[1], v.coordinates_[2] - other.coordinates_[2]);
 }
 
 Vector3D operator*(const Vector3D& v, const Vector3D& other) {
