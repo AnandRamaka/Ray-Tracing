@@ -2,12 +2,17 @@
 #define VECTOR_3D_HPP
 
 #include <iostream>
+#include <cmath>
 
 class Vector3D {
     public:
         Vector3D() = default;
         Vector3D(double x, double y, double z);
-    
+
+        static Vector3D random(double lower, double upper);
+        static Vector3D random();
+
+
         Vector3D operator-() const;
         Vector3D& operator+=(const Vector3D &vector);
         Vector3D& operator-=(const Vector3D &vector);
@@ -17,7 +22,8 @@ class Vector3D {
         double GetX() const {return coordinates_[0];}
         double GetY() const {return coordinates_[1];}
         double GetZ() const {return coordinates_[2];}
-        
+        bool NearZero() const { return (std::fabs(coordinates_[0]) < 1e-8) && (std::fabs(coordinates_[1]) < 1e-8) && (std::fabs(coordinates_[2]) < 1e-8); }
+
         double Magnitude() const;
         Vector3D UnitVector() const;
 
