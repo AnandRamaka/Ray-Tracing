@@ -17,7 +17,18 @@ bool Sphere::Hit(const Ray& ray, HitRecord& out) const {
         auto t = (-b - std::sqrt(discriminant))/(2.0 * a); // use closest t for now, -b - discriminant instead of +discriminant
         out.t = t; // t
         out.point = ray.GetAt(t); // point of intersection
-        out.normal = (out.point - _loc) / _r; // normalize the normal vector
+
+
+        out.normal = (out.point - _loc) / _r;
+        // if( ray.GetDirection().Dot(out.normal) > 0.0 ){
+        //     out.normal = -out.normal;
+        // }
+        if( !out.front_facing ){
+            out.normal = -out.normal;
+        }
+
+         // normalize the normal vector
         return true;
+
     }
 }
