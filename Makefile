@@ -1,5 +1,5 @@
 CXX=clang++
-CXX_FLAGS=-std=c++20 -g -O0 -Wall -Wextra -Werror -Iincludes/
+CXX_FLAGS=-std=c++20 -g -O2 -Wall -Wextra -Werror -Iincludes/
 SRC_FILES=$(filter-out src/main.cc, $(wildcard src/**.cc src/**/*.cc src/**.cpp src/**/*.cpp)) # Automatically grab all files in folder, excluding main
 
 exec: bin/exec

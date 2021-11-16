@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <cmath>
 #include "lodepng.h"
 #include "vector3d.hpp"
 
@@ -19,9 +20,10 @@ void writeFile(std::vector<std::vector<Color>> image, std::string filename) {
     std::vector<unsigned char> imagePixels(width * height * 4);
     for(unsigned y = 0; y < height; y++)
     for(unsigned x = 0; x < width; x++) {
-        imagePixels[4 * width * y + 4 * x + 0] = image[y][x].GetX();
-        imagePixels[4 * width * y + 4 * x + 1] = image[y][x].GetY();
-        imagePixels[4 * width * y + 4 * x + 2] = image[y][x].GetZ();
+        // gamma correct 1/2 = sqrt(R/255) * 255
+        imagePixels[4 * width * y + 4 * x + 0] = std::sqrt(image[y][x].GetX()/255) * 255;
+        imagePixels[4 * width * y + 4 * x + 1] = std::sqrt(image[y][x].GetY()/255) * 255;
+        imagePixels[4 * width * y + 4 * x + 2] = std::sqrt(image[y][x].GetZ()/255) * 255;
         imagePixels[4 * width * y + 4 * x + 3] = 255;
     }
 

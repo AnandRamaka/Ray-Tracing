@@ -4,7 +4,7 @@
 class Sphere : public Hittable {
 public:
     Sphere(const Vector3D loc, double radius) : _loc(loc), _r(std::abs(radius)) {};
-    bool Hit(const Ray& r, HitRecord& out) const override;
+    bool Hit(const Ray& r, double min, double max, HitRecord& out) const override;
     Vector3D GetLoc(){ return _loc; }
     double GetRadius(){ return _r; }
 

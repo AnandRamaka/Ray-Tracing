@@ -12,5 +12,5 @@ public:
 
 class Hittable {
 public:
-    virtual bool Hit(const Ray& r, HitRecord& out) const = 0;
+    virtual bool Hit(const Ray& r, double min, double max, HitRecord& out) const = 0;
 };

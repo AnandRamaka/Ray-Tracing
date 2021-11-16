@@ -1,7 +1,7 @@
 #include <cmath>
 #include "shapes/sphere.hpp"
 
-bool Sphere::Hit(const Ray& ray, HitRecord& out) const {
+bool Sphere::Hit(const Ray& ray, double min, double max, HitRecord& out) const {
     // The equation for a hit is (P - C) . (P - C) = r^2, where P is any given point
     // Our ray is of the form P = A + tb, so we want to solve (A + tb - C) . (A + tb - C) = r^2
     // Expanding out, this is a quadratic in t of the form t^2 * (b . b) + t * (2b . (A - C)) + (A - C) . (A - C) - r^2
@@ -15,6 +15,12 @@ bool Sphere::Hit(const Ray& ray, HitRecord& out) const {
         return false;
     } else {
         auto t = (-b - std::sqrt(discriminant))/(2.0 * a); // use closest t for now, -b - discriminant instead of +discriminant
+        if(t < min || t > max) {
+           t = (-b + std::sqrt(discriminant))/(2.0 * a);
+           if(t < min || t > max) {
+               return false;
+           }
+        }
         out.t = t; // t
         out.point = ray.GetAt(t); // point of intersection
 
