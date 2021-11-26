@@ -21,35 +21,35 @@ Color output(const Ray& r, const Hittables& hittable, int depth) {
     Ray scattered;
     Color attenuation;
     if (hit.mat->Scatter(r, hit, attenuation, scattered))
-        return (attenuation / 255) * output(scattered, hittable, depth-1);
+        return attenuation * output(scattered, hittable, depth-1);
     return Color(0, 0, 0);
   }
   Vector3D unit = r.GetDirection().UnitVector();
   double t = 0.5 * (unit.GetY() + 1);
-  return (1 - t) * Color(255, 255, 255) + t * Color(128, 180, 255);
+  return (1 - t) * Color(1, 1, 1) + t * Color(0.5, 0.7, 1.0);
 }
 
 int main(int argc, char *argv[]) {
-  //NOTE: this sample will overwrite the file or test.png without warning!
+  // //NOTE: this sample will overwrite the file or test.png without warning!
   const char* filename = argc > 1 ? argv[1] : "test.png";
   size_t height = argc > 2 ? atoi(argv[2]) : 225;
   size_t width = argc > 3 ? atoi(argv[3]) : 400;
-
+  
   std::vector<std::vector<Color>> image;
   double aspectRatio = width / (double) height;
 
   // Define hittable objects
   Hittables hittable_list;
 
-  Metal blue(Color(0, 0, 200));
-  Lambertian orange(Color(233, 74, 39));
-  Lambertian red(Color(200, 0, 0));
-  Metal green(Color(0, 200, 0));
+  Lambertian ground(Color(0.8, 0.8, 0));
+  Lambertian red(Color(1, 0, 0));
+  Metal green(Color(0, 0.8, 0));
+  Metal blue(Color(0, 0, 0.9));
 
-  Sphere s1 = Sphere(Vector3D(-1.5, 0, 1), 0.5, &blue);
-  Sphere s2 = Sphere(Vector3D(0, -100.5, 1), 100, &orange);
-  Sphere s3 = Sphere(Vector3D(1.5, 0, 1), 0.5, &red);
-  Sphere s4 = Sphere(Vector3D(0, 0, 1), 0.5, &green);
+  Sphere s1 = Sphere(Vector3D(-1.5, 0, 1), 0.5, &red);
+  Sphere s2 = Sphere(Vector3D(0, -100.5, 1), 100, &ground);
+  Sphere s3 = Sphere(Vector3D(1.5, 0, 1), 0.5, &green);
+  Sphere s4 = Sphere(Vector3D(0, 0, 1), 0.5, &blue);
 
   hittable_list.Add(&s1);
   hittable_list.Add(&s2);
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
         Ray r = camera.GetRayAt(u, v);
         pixel_color += output(r, hittable_list, depth) / 10;
       }
-      row.push_back(pixel_color);
+      row.push_back(pixel_color * 255);
 
       // progress counter
       std::cout << int((float)(i)/height * 100.0) << " %\r";

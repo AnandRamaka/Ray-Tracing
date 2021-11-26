@@ -58,7 +58,8 @@ double Vector3D::Magnitude() const {
 }
 
 Vector3D Vector3D::UnitVector() const {
-    return Vector3D{coordinates_[0]/Magnitude(), coordinates_[1]/Magnitude(), coordinates_[2]/Magnitude()};
+    double magnitude = Magnitude();
+    return Vector3D{coordinates_[0], coordinates_[1], coordinates_[2]} / magnitude;
 }
 
 

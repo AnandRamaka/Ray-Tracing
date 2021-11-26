@@ -9,7 +9,8 @@ public:
 
     // we will need the ray for other types of materials, but not for this one
     virtual bool Scatter([[maybe_unused]] const Ray& _, const HitRecord& hit, Color& attenuation, Ray& scattered) const override {
-        auto scatter_direction = hit.normal + randomUnitSphere();
+        Vector3D randomDirection = randomUnitSphere();
+        auto scatter_direction = hit.normal + randomDirection;
         if(scatter_direction.NearZero()) {
             scatter_direction = hit.normal;
         }

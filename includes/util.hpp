@@ -1,5 +1,6 @@
 #pragma once
 #include "vector3d.hpp"
+#include <cstdlib>
 
 double random_range(double lower, double upper);
 
