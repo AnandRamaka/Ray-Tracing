@@ -7,5 +7,5 @@ class HitRecord;
 
 class Material {
 public:
-    virtual bool scatter(const Ray& r, const HitRecord& hit, Color& attenuation, Ray& scattered) const = 0;
+    virtual bool Scatter(const Ray& r, const HitRecord& hit, Color& attenuation, Ray& scattered) const = 0;
 };

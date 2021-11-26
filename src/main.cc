@@ -9,9 +9,10 @@
 #include "shapes/sphere.hpp"
 #include "camera.hpp"
 #include "materials/lambertian.hpp"
+#include "materials/metal.hpp"
 
 Color output(const Ray& r, const Hittables& hittable, int depth) {
-  // gradient from UIUC orange to blue
+  // prevents from recursing for too long
   if (depth <= 0)
     return Color(0, 0, 0);
   HitRecord hit;
@@ -19,8 +20,8 @@ Color output(const Ray& r, const Hittables& hittable, int depth) {
   if(hittable.Hit(r, 0.001, std::numeric_limits<double>::infinity(), hit)) {
     Ray scattered;
     Color attenuation;
-    if (hit.mat->scatter(r, hit, attenuation, scattered))
-        return (attenuation / 255.0) * output(scattered, hittable, depth-1);
+    if (hit.mat->Scatter(r, hit, attenuation, scattered))
+        return (attenuation / 255) * output(scattered, hittable, depth-1);
     return Color(0, 0, 0);
   }
   Vector3D unit = r.GetDirection().UnitVector();
@@ -40,19 +41,20 @@ int main(int argc, char *argv[]) {
   // Define hittable objects
   Hittables hittable_list;
 
-  Lambertian blue(Color(0, 0, 255));
+  Metal blue(Color(0, 0, 200));
   Lambertian orange(Color(233, 74, 39));
-  Sphere s1 = Sphere(Vector3D(0, 0, 1), 0.5, &blue);
-  // Sphere s2 = Sphere(Vector3D(-2, 0, -1), 0.5);
-  // Sphere s3 = Sphere(Vector3D(-1, 0, -1), 0.5);
-  // Sphere s4 = Sphere(Vector3D(1, 0, -1), 0.5);
-  Sphere s5 = Sphere(Vector3D(0, -100.5, 1), 100, &orange);
+  Lambertian red(Color(200, 0, 0));
+  Metal green(Color(0, 200, 0));
+
+  Sphere s1 = Sphere(Vector3D(-1.5, 0, 1), 0.5, &blue);
+  Sphere s2 = Sphere(Vector3D(0, -100.5, 1), 100, &orange);
+  Sphere s3 = Sphere(Vector3D(1.5, 0, 1), 0.5, &red);
+  Sphere s4 = Sphere(Vector3D(0, 0, 1), 0.5, &green);
 
   hittable_list.Add(&s1);
-  // hittable_list.Add(&s2);
-  // hittable_list.Add(&s3);
-  // hittable_list.Add(&s4);
-  hittable_list.Add(&s5);
+  hittable_list.Add(&s2);
+  hittable_list.Add(&s3);
+  hittable_list.Add(&s4);
 
   // Camera definitions
   double vertical_fov = 120;
