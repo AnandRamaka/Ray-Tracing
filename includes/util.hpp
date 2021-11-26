@@ -11,3 +11,6 @@ Vector3D randomInUnitSphere();
 
 // Returns a random vector that is on the unit sphere, mimics lambertian reflection
 Vector3D randomUnitSphere();
+
+// Returns a random vector that is on the unit disk. It is used for adding focus to the camera.
+Vector3D randomInUnitDisk();

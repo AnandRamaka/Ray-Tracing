@@ -32,36 +32,57 @@ Color output(const Ray& r, const Hittables& hittable, int depth) {
 int main(int argc, char *argv[]) {
   // //NOTE: this sample will overwrite the file or test.png without warning!
   const char* filename = argc > 1 ? argv[1] : "test.png";
-  size_t height = argc > 2 ? atoi(argv[2]) : 225;
-  size_t width = argc > 3 ? atoi(argv[3]) : 400;
+  size_t height = argc > 2 ? atoi(argv[2]) : 500;
+  size_t width = argc > 3 ? atoi(argv[3]) : 1200;
   
   std::vector<std::vector<Color>> image;
   double aspectRatio = width / (double) height;
 
   // Define hittable objects
+
   Hittables hittable_list;
 
-  Lambertian ground(Color(0.8, 0.8, 0));
-  Lambertian red(Color(1, 0, 0));
-  Metal green(Color(0, 0.8, 0));
-  Metal blue(Color(0, 0, 0.9));
+  Lambertian ground(Color(0.5, 0.5, 0.5));
+  Sphere ground_sphere = Sphere(Vector3D(0, -1000, 0), 1000, &ground);
 
-  Sphere s1 = Sphere(Vector3D(-1.5, 0, 1), 0.5, &red);
-  Sphere s2 = Sphere(Vector3D(0, -100.5, 1), 100, &ground);
-  Sphere s3 = Sphere(Vector3D(1.5, 0, 1), 0.5, &green);
-  Sphere s4 = Sphere(Vector3D(0, 0, 1), 0.5, &blue);
+  hittable_list.Add(&ground_sphere);
 
-  hittable_list.Add(&s1);
-  hittable_list.Add(&s2);
-  hittable_list.Add(&s3);
-  hittable_list.Add(&s4);
+  for (int i = -12; i < 12; ++i) {
+    for (int j = -12; j < 12; ++j) {
+      double choose_mat = random_double();
+      Vector3D center(i + 0.9 * random_double(), 0.2, j + 0.9 * random_double());
+
+      if ((center - Vector3D(4, 0.2, 0)).Magnitude() > 0.9) {
+
+          if (choose_mat < 0.65) {
+              // diffuse
+              Vector3D albedo = Vector3D::random() * Vector3D::random();
+              Lambertian* sphere_material = new Lambertian(albedo);
+              Sphere* s = new Sphere(center, 0.2, sphere_material);
+              hittable_list.Add(s);
+          } else {
+              // metal
+              Vector3D albedo = Vector3D::random(0.5, 1);
+              Metal* sphere_material = new Metal(albedo);
+              Sphere* s = new Sphere(center, 0.2, sphere_material);
+              hittable_list.Add(s);
+          }
+      }
+    }
+  }
+
+  Metal center_material = Metal(Vector3D(0.7, 0.6, 0.5));
+  Sphere center_sphere = Sphere(Vector3D(0, 1, 0), 1.0, &center_material);
+  hittable_list.Add(&center_sphere);
 
   // Camera definitions
-  double vertical_fov = 120;
-  Vector3D look_from = Vector3D(0, 0, -1);
-  Vector3D look_at = Vector3D(0, 0, 1);
+  double vertical_fov = 40;
+  Vector3D look_from = Vector3D(12, 2, 3);
+  Vector3D look_at = Vector3D(0, 0, 0);
+  double dist_to_focus = 12;
+  double aperture = 0.1;
 
-  Camera camera = Camera(look_from, look_at, vertical_fov, aspectRatio);
+  Camera camera = Camera(look_from, look_at, vertical_fov, aspectRatio, dist_to_focus, aperture);
 
   int depth = 50;
 
