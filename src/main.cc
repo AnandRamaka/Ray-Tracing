@@ -43,26 +43,26 @@ int main(int argc, char *argv[]) {
 
   Hittables hittable_list;
 
-  // Lambertian ground(Color(1, 0, 0));
-  // Triangle t = Triangle(Vector3D(-1, 0, -1), Vector3D(0, 2, -1), Vector3D(1, 0, -1), &ground);
+  Metal t_mat(Color(1, 0, 0));
+  Triangle t = Triangle(Vector3D(-1, 0, 0), Vector3D(-1, 0.5, 0), Vector3D(-1, 0.5, -1), &t_mat);
 
-  Metal ground(Color(0.8, 0.8, 0));
-  Lambertian center(Color(0.1, 0.2, 0.5));
-  Lambertian left(Color(0.1, 0.3, 0.5));
+  Lambertian ground(Color(0.8, 0.8, 0));
+  // Lambertian center(Color(0.1, 0.2, 0.5));
+  // Lambertian left(Color(0.1, 0.3, 0.5));
   Metal right(Color(0.8, 0.6, 0.2));
 
   Sphere s1 = Sphere(Vector3D(0.0, -100.5, -1.0), 100.0, &ground);
-  Sphere s2 = Sphere(Vector3D(0.0, 0.0, -1.0), 0.5, &center);
-  Sphere s3 = Sphere(Vector3D(-1.0, 0.0, -1.0), 0.5, &left);
+  // Sphere s2 = Sphere(Vector3D(0.0, 0.0, -1.0), 0.5, &center);
+  // Sphere s3 = Sphere(Vector3D(-1.0, 0.0, -1.0), 0.5, &left);
   Sphere s4 = Sphere(Vector3D(1.0, 0.0, -1.0), 0.5, &right);
 
   hittable_list.Add(&s1);
-  hittable_list.Add(&s2);
-  hittable_list.Add(&s3);
+  // hittable_list.Add(&s2);
+  // hittable_list.Add(&s3);
   hittable_list.Add(&s4);   
 
   // hittable_list.Add(&ground_sphere);
-  // hittable_list.Add(&t);
+  hittable_list.Add(&t);
 
   // for (int i = -12; i < 12; ++i) {
   //   for (int j = -12; j < 12; ++j) {
@@ -93,13 +93,11 @@ int main(int argc, char *argv[]) {
   // hittable_list.Add(&center_sphere);
 
   // Camera definitions
-  double vertical_fov = 40;
-  Vector3D look_from = Vector3D(3, 3, 2);
+  double vertical_fov = 120;
+  Vector3D look_from = Vector3D(0, 0, 1);
   Vector3D look_at = Vector3D(0, 0, -1);
-  double dist_to_focus = (look_from-look_at).Magnitude();
-  double aperture = 2.0;
 
-  Camera camera = Camera(look_from, look_at, vertical_fov, aspectRatio, dist_to_focus, aperture);
+  Camera camera = Camera(look_from, look_at, vertical_fov, aspectRatio);
 
   int depth = 50;
 
