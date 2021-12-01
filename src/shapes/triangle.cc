@@ -3,15 +3,13 @@
 
 
 
-bool Triangle::Hit(const Ray& ray, double a, double b, HitRecord& out) const{
+bool Triangle::Hit(const Ray& ray, [[maybe_unused]] double min, [[maybe_unused]] double max, HitRecord& out) const{
     
     // Vector3D dir_cross_e2 = ray.GetDirection().Cross( _e2 );
     // double det = _e1.Dot(dir_cross_e2);
     // if( std::abs(det) < EPSILON ){
     //     return false;
     // }
-    
-
 
     // double f = 1.0 / det;
     // //std::cout << f << std::endl;
@@ -95,7 +93,4 @@ bool Triangle::Hit(const Ray& ray, double a, double b, HitRecord& out) const{
     out.normal = _normal;
     out.mat = _mat;
     return true;
-    
-
-
 }

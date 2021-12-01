@@ -33,8 +33,8 @@ Color output(const Ray& r, const Hittables& hittable, int depth) {
 int main(int argc, char *argv[]) {
   // //NOTE: this sample will overwrite the file or test.png without warning!
   const char* filename = argc > 1 ? argv[1] : "test.png";
-  size_t height = argc > 2 ? atoi(argv[2]) : 500;
-  size_t width = argc > 3 ? atoi(argv[3]) : 1200;
+  size_t height = argc > 2 ? atoi(argv[2]) : 225;
+  size_t width = argc > 3 ? atoi(argv[3]) : 440;
   
   std::vector<std::vector<Color>> image;
   double aspectRatio = width / (double) height;
@@ -43,10 +43,29 @@ int main(int argc, char *argv[]) {
 
   Hittables hittable_list;
 
-  Lambertian ground(Color(0.5, 0.5, 0.5));
-  Triangle t = Triangle(Vector3D(1, 0, -1), Vector3D(1, 0, -1), Vector3D(1, 0, -1), &ground);
+  Lambertian ground(Color(1, 0, 0));
+  Triangle t = Triangle(Vector3D(-1, 0, -1), Vector3D(0, 2, -1), Vector3D(1, 0, -1), &ground);
 
-  hittable_list.Add(&t);
+  // Lambertian orange(Color(233, 74, 39));
+  // Sphere ground_sphere = Sphere(Vector3D(0, -100.5, 1), 100, &orange);
+
+  Metal blue(Color(0, 0, 200));
+  Lambertian orange(Color(233, 74, 39));
+  Lambertian red(Color(200, 0, 0));
+  Metal green(Color(0, 200, 0));
+
+  Sphere s1 = Sphere(Vector3D(-1.5, 0, 1), 0.5, &blue);
+  Sphere s2 = Sphere(Vector3D(0, -100.5, 1), 100, &orange);
+  Sphere s3 = Sphere(Vector3D(1.5, 0, 1), 0.5, &red);
+  Sphere s4 = Sphere(Vector3D(0, 0, 1), 0.5, &green);
+
+  hittable_list.Add(&s1);
+  hittable_list.Add(&s2);
+  hittable_list.Add(&s3);
+  hittable_list.Add(&s4);   
+
+  // hittable_list.Add(&ground_sphere);
+  // hittable_list.Add(&t);
 
   // for (int i = -12; i < 12; ++i) {
   //   for (int j = -12; j < 12; ++j) {
@@ -77,11 +96,11 @@ int main(int argc, char *argv[]) {
   // hittable_list.Add(&center_sphere);
 
   // Camera definitions
-  double vertical_fov = 40;
-  Vector3D look_from = Vector3D(12, 2, 3);
-  Vector3D look_at = Vector3D(0, 0, 0);
-  double dist_to_focus = 12;
-  double aperture = 0.1;
+  double vertical_fov = 20;
+  Vector3D look_from = Vector3D(3, 3, 2);
+  Vector3D look_at = Vector3D(0, 0, -1);
+  double dist_to_focus = (look_from-look_at).Magnitude();
+  double aperture = 2.0;
 
   Camera camera = Camera(look_from, look_at, vertical_fov, aspectRatio, dist_to_focus, aperture);
 
