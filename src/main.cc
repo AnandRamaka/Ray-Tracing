@@ -7,6 +7,7 @@
 #include "writer.hpp"
 #include "shapes/hittables.hpp"
 #include "shapes/sphere.hpp"
+#include "shapes/triangle.hpp"
 #include "camera.hpp"
 #include "materials/lambertian.hpp"
 #include "materials/metal.hpp"
@@ -43,37 +44,37 @@ int main(int argc, char *argv[]) {
   Hittables hittable_list;
 
   Lambertian ground(Color(0.5, 0.5, 0.5));
-  Sphere ground_sphere = Sphere(Vector3D(0, -1000, 0), 1000, &ground);
+  Triangle t = Triangle(Vector3D(1, 0, -1), Vector3D(1, 0, -1), Vector3D(1, 0, -1), &ground);
 
-  hittable_list.Add(&ground_sphere);
+  hittable_list.Add(&t);
 
-  for (int i = -12; i < 12; ++i) {
-    for (int j = -12; j < 12; ++j) {
-      double choose_mat = random_double();
-      Vector3D center(i + 0.9 * random_double(), 0.2, j + 0.9 * random_double());
+  // for (int i = -12; i < 12; ++i) {
+  //   for (int j = -12; j < 12; ++j) {
+  //     double choose_mat = random_double();
+  //     Vector3D center(i + 0.9 * random_double(), 0.2, j + 0.9 * random_double());
 
-      if ((center - Vector3D(4, 0.2, 0)).Magnitude() > 0.9) {
+  //     if ((center - Vector3D(4, 0.2, 0)).Magnitude() > 0.9) {
 
-          if (choose_mat < 0.65) {
-              // diffuse
-              Vector3D albedo = Vector3D::random() * Vector3D::random();
-              Lambertian* sphere_material = new Lambertian(albedo);
-              Sphere* s = new Sphere(center, 0.2, sphere_material);
-              hittable_list.Add(s);
-          } else {
-              // metal
-              Vector3D albedo = Vector3D::random(0.5, 1);
-              Metal* sphere_material = new Metal(albedo);
-              Sphere* s = new Sphere(center, 0.2, sphere_material);
-              hittable_list.Add(s);
-          }
-      }
-    }
-  }
+  //         if (choose_mat < 0.65) {
+  //             // diffuse
+  //             Vector3D albedo = Vector3D::random() * Vector3D::random();
+  //             Lambertian* sphere_material = new Lambertian(albedo);
+  //             Sphere* s = new Sphere(center, 0.2, sphere_material);
+  //             hittable_list.Add(s);
+  //         } else {
+  //             // metal
+  //             Vector3D albedo = Vector3D::random(0.5, 1);
+  //             Metal* sphere_material = new Metal(albedo);
+  //             Sphere* s = new Sphere(center, 0.2, sphere_material);
+  //             hittable_list.Add(s);
+  //         }
+  //     }
+  //   }
+  // }
 
-  Metal center_material = Metal(Vector3D(0.7, 0.6, 0.5));
-  Sphere center_sphere = Sphere(Vector3D(0, 1, 0), 1.0, &center_material);
-  hittable_list.Add(&center_sphere);
+  // Metal center_material = Metal(Vector3D(0.7, 0.6, 0.5));
+  // Sphere center_sphere = Sphere(Vector3D(0, 1, 0), 1.0, &center_material);
+  // hittable_list.Add(&center_sphere);
 
   // Camera definitions
   double vertical_fov = 40;
