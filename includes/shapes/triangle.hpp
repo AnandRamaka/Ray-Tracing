@@ -20,6 +20,6 @@ private:
     Vector3D _p1, _p2, _p3;
     Vector3D _e1, _e2;
     Vector3D _normal;
-    double EPSILON = .00001;
+    double EPSILON = .00000000000001;
     Material * _mat;
 };

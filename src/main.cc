@@ -43,8 +43,8 @@ int main(int argc, char *argv[]) {
 
   Hittables hittable_list;
 
-  Metal t_mat(Color(1, 0, 0));
-  Triangle t = Triangle(Vector3D(-1, 0, 0), Vector3D(-1, 0.5, 0), Vector3D(-1, 0.5, -1), &t_mat);
+  Lambertian t_mat(Color(1, 0, 0));
+  Triangle t = Triangle(Vector3D(-0.5, 0.5, 1), Vector3D(0, 1.5, 1), Vector3D(0.5, 0.5, 1), &t_mat);
 
   Lambertian ground(Color(0.8, 0.8, 0));
   // Lambertian center(Color(0.1, 0.2, 0.5));
@@ -52,9 +52,9 @@ int main(int argc, char *argv[]) {
   Metal right(Color(0.8, 0.6, 0.2));
 
   Sphere s1 = Sphere(Vector3D(0.0, -100.5, -1.0), 100.0, &ground);
-  // Sphere s2 = Sphere(Vector3D(0.0, 0.0, -1.0), 0.5, &center);
-  // Sphere s3 = Sphere(Vector3D(-1.0, 0.0, -1.0), 0.5, &left);
-  Sphere s4 = Sphere(Vector3D(1.0, 0.0, -1.0), 0.5, &right);
+  // Sphere s2 = Sphere(Vector3D(0.0, 0.0, 1.0), 0.5, &center);
+  // Sphere s3 = Sphere(Vector3D(-1.0, 0.0, 1.0), 0.5, &left);
+  Sphere s4 = Sphere(Vector3D(0.0, 0.0, -0.1), 0.5, &right);
 
   hittable_list.Add(&s1);
   // hittable_list.Add(&s2);
@@ -94,8 +94,8 @@ int main(int argc, char *argv[]) {
 
   // Camera definitions
   double vertical_fov = 120;
-  Vector3D look_from = Vector3D(0, 0, 1);
-  Vector3D look_at = Vector3D(0, 0, -1);
+  Vector3D look_from = Vector3D(0, 0, -1);
+  Vector3D look_at = Vector3D(0, 0, 1);
 
   Camera camera = Camera(look_from, look_at, vertical_fov, aspectRatio);
 

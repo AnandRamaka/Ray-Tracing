@@ -4,6 +4,8 @@
 
 bool Triangle::Hit(const Ray& ray, [[maybe_unused]] double min, [[maybe_unused]] double max, HitRecord& out) const{
     
+    out.normal = _normal;
+    out.mat = _mat;
     // Vector3D dir_cross_e2 = ray.GetDirection().Cross( _e2 );
     // double det = _e1.Dot(dir_cross_e2);
     // if( std::abs(det) < EPSILON ){
@@ -39,44 +41,45 @@ bool Triangle::Hit(const Ray& ray, [[maybe_unused]] double min, [[maybe_unused]]
     // // double t = temp.Dot(origin_cross_e1) *= f;
     // return true;
 
-    float NdotRayDirection = _normal.Dot(ray.GetDirection());
+    double NdotRayDirection = _normal.Dot(ray.GetDirection());
     if( std::abs(NdotRayDirection) < EPSILON ){
+        std::cout << "case 1: " << _normal << std::endl;
         return false;
     }
 
     // std::cout << "past 1" << std::endl;
 
-    float d = _normal.Dot(_p1);
+    double d = _normal.Dot(_p1);
+    double t = (_normal.Dot(ray.GetSource()) + d ) / NdotRayDirection;
 
-    float t = (_normal.Dot(ray.GetSource()) + d ) / NdotRayDirection;
-
-
-    double a = ray.GetDirection().Dot(ray.GetDirection()); 
-    Vector3D A_minus_C = ray.GetSource() - _normal;
-    double b = (2.0*ray.GetDirection()).Dot(A_minus_C); // (2b . (A - C))
-    double c = A_minus_C.Dot(A_minus_C) - _normal.Dot(_normal);
-
-    double discriminant = b*b - 4*a*c;
-
+    if(_normal.UnitVector().Dot(ray.GetDirection()) > 0.0) {
+        // std::cout << "aaaa" << std::endl;
+        t = (-_normal.Dot(ray.GetSource()) + d ) / NdotRayDirection;  
+    }
 
     if(t < min || t > max) {
-        t = (-b + std::sqrt(discriminant))/(2.0 * a);
-        if(t < min || t > max) {
-            return false;
-        }
+        // std::cout << "case 2: " << _normal.Dot(ray.GetDirection()) << " " << ray.GetSource() << " " << d << std::endl; 
+        return false;
     }
     // std::cout << "past 2" << std::endl;
 
-    Vector3D P = ray.GetSource() + t * ray.GetDirection();
+    Vector3D P = ray.GetAt(t);
+    out.point = P;
 
     if( std::isnan(P.GetX()) || std::isnan(P.GetY()) || std::isnan(P.GetZ()) ){
+        std::cout << "case 3" << std::endl;
         return false;
+
+    } else {
+        // std::cout << "correct" << std::endl;
+        
+        // return true;
+        
     }
 
     // std::cout << P << std::endl;
 
     Vector3D C;
-
     Vector3D edge0 = _p2 - _p1;
     Vector3D vp0 = P - _p1;
     C = edge0.Cross(vp0);
@@ -112,7 +115,6 @@ bool Triangle::Hit(const Ray& ray, [[maybe_unused]] double min, [[maybe_unused]]
     // std::cout << "all tests passed" << std::endl;
 
 
-    out.normal = _normal;
-    out.mat = _mat;
+    
     return true;
 }
