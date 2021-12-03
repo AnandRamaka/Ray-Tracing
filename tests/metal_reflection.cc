@@ -13,17 +13,23 @@ TEST_CASE("Metal Reflection", "")
         Vector3D normal(1,2,3);
         Vector3D result(-11, -23, -35);
 
-        REQUIRE(reflect(vec,normal) == result);
+        Vector3D albedo = Vector3D::random(0.5, 1);
+        Metal* metal = new Metal(albedo);
 
-        //tests with negative values
+        REQUIRE(metal->Reflect(vec,normal) == result);
+
+        //tests with negative values 
 
         Vector3D vec2(1,-1,1);
         Vector3D normal2(1,2,-3);
         
-        Vector3D result2(9,-17,-23);
+        Vector3D result2(9,15,-23);
 
-        REQUIRE(reflect(vec2,normal2) == result2);
+        REQUIRE(metal->Reflect(vec2,normal2) == result2);
+        
 
 
     }
 }
+
+#endif

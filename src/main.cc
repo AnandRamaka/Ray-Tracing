@@ -32,8 +32,8 @@ Color output(const Ray& r, const Hittables& hittable, int depth) {
 int main(int argc, char *argv[]) {
   // //NOTE: this sample will overwrite the file or test.png without warning!
   const char* filename = argc > 1 ? argv[1] : "test.png";
-  size_t height = argc > 2 ? atoi(argv[2]) : 500;
-  size_t width = argc > 3 ? atoi(argv[3]) : 1200;
+  size_t height = argc > 2 ? atoi(argv[2]) : 200;
+  size_t width = argc > 3 ? atoi(argv[3]) : 444;
   
   std::vector<std::vector<Color>> image;
   double aspectRatio = width / (double) height;
