@@ -1,6 +1,6 @@
 #include "camera.hpp"
 
-Camera::Camera(Vector3D point_to_look_from, Vector3D point_to_look_at, double vertical_fov, double aspect_ratio, double distance_to_focus, double aperture) : origin_(point_to_look_from), thin_lens_radius(aperture / 2.0) {
+Camera::Camera(Vector3D point_to_look_from, Vector3D point_to_look_at, double vertical_fov, double aspect_ratio) : origin_(point_to_look_from) {
     // Implement a vertical fov. This determines the plane that the rays intersect with. 
     // The larger the fov, the more of the scene will be present.
 
@@ -17,9 +17,9 @@ Camera::Camera(Vector3D point_to_look_from, Vector3D point_to_look_at, double ve
     u_ = up_vector.Cross(vector_towards_point_to_look_at).UnitVector(); //first orthonormal vector
     v_ = vector_towards_point_to_look_at.Cross(u_); //second orthonormal vector
 
-    horizontal_ = distance_to_focus * view_width * u_;
-    vertical_ = distance_to_focus * view_height * v_;
-    lower_left_ = origin_ - horizontal_/2 - vertical_/2 - distance_to_focus * vector_towards_point_to_look_at;
+    horizontal_ = view_width * u_;
+    vertical_ = view_height * v_;
+    lower_left_ = origin_ - horizontal_/2 - vertical_/2 - vector_towards_point_to_look_at;
 }
 
 double Camera::DegreesToRadians(double degrees) {
@@ -27,11 +27,6 @@ double Camera::DegreesToRadians(double degrees) {
 }
 
 Ray Camera::GetRayAt(double u, double v) {
-    // In order to add focus and blur, we can generate random rays originating 
-    // from inside a unit disk centered at the point that we are looking from. 
-    Vector3D rd = thin_lens_radius * randomInUnitDisk();
-    Vector3D offset = u_ * rd.GetX() + v_ * rd.GetY();
-
-    Ray r(origin_ + offset, lower_left_ + u*horizontal_ + v*vertical_ - origin_ - offset);
+    Ray r(origin_, lower_left_ + u*horizontal_ + v*vertical_ - origin_);
     return r;
 }
