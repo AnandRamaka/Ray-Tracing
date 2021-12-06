@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <limits>
+#include <utility>
 
 #include "util.hpp"
 #include "vector3d.hpp"
@@ -30,74 +31,133 @@ Color output(const Ray& r, const Hittables& hittable, int depth) {
   return (1 - t) * Color(1, 1, 1) + t * Color(0.5, 0.7, 1.0);
 }
 
-int main(int argc, char *argv[]) {
-  // //NOTE: this sample will overwrite the file or test.png without warning!
-  const char* filename = argc > 1 ? argv[1] : "test.png";
-  size_t height = argc > 2 ? atoi(argv[2]) : 225;
-  size_t width = argc > 3 ? atoi(argv[3]) : 440;
-  
-  std::vector<std::vector<Color>> image;
-  double aspectRatio = width / (double) height;
+std::pair<Hittables*, Camera*> Scene1(double aspectRatio) {
+  Hittables* hittable_list = new Hittables();
 
+  for (int i = -12; i < 12; ++i) {
+    for (int j = -12; j < 12; ++j) {
+      double choose_mat = random_double();
+      Vector3D center(i + 0.9 * random_double(), 0.2, j + 0.9 * random_double());
+
+      if ((center - Vector3D(4, 0.2, 0)).Magnitude() > 0.9) {
+
+          if (choose_mat < 0.65) {
+              // diffuse
+              Vector3D albedo = Vector3D::random() * Vector3D::random();
+              Lambertian* sphere_material = new Lambertian(albedo);
+              Sphere* s = new Sphere(center, 0.2, sphere_material);
+              hittable_list->Add(s);
+          } else {
+              // metal
+              Vector3D albedo = Vector3D::random(0.5, 1);
+              Metal* sphere_material = new Metal(albedo);
+              Sphere* s = new Sphere(center, 0.2, sphere_material);
+              hittable_list->Add(s);
+          }
+      }
+    }
+  }
+
+  Lambertian* ground = new Lambertian(Color(0.5, 0.5, 0.5));
+  Sphere* ground_sphere = new Sphere(Vector3D(0, -1000, 0), 1000, ground);
+
+  hittable_list->Add(ground_sphere);
+
+  Metal* center_material = new Metal(Vector3D(0.7, 0.6, 0.5));
+  Sphere* center_sphere = new Sphere(Vector3D(0, 1, 0), 1.0, center_material);
+  hittable_list->Add(center_sphere);
+
+  // Camera definitions
+  double vertical_fov = 40;
+  Vector3D look_from = Vector3D(12, 2, 3);
+  Vector3D look_at = Vector3D(0, 0, 0);
+  double distance_to_focus = 12.0;
+  double aperture = 0.1;
+
+  Camera* camera = new Camera(look_from, look_at, vertical_fov, aspectRatio, distance_to_focus, aperture);
+  return std::make_pair(hittable_list, camera);
+}
+
+std::pair<Hittables*, Camera*> Scene2(double aspectRatio, Vector3D look_from, double vertical_fov) {
+  Hittables* hittable_list = new Hittables();
+
+  Lambertian* ground = new Lambertian(Color(0.8, 0.8, 0));
+  Lambertian* center = new Lambertian(Color(0.1, 0.2, 0.5));
+  Metal* left = new Metal(Color(0.1, 0.3, 0.5));
+  Metal* right = new Metal(Color(0.8, 0.6, 0.2));
+
+  Sphere* s1 = new Sphere(Vector3D(0.0, -100.5, -1.0), 100.0, ground);
+  Sphere* s2 = new Sphere(Vector3D(-1.0, 0.0, 1.0), 0.5, center);
+  Sphere* s3 = new Sphere(Vector3D(0.0, 0.0, 1.0), 0.5, left);
+  Sphere* s4 = new Sphere(Vector3D(1.0, 0.0, 1.0), 0.5, right);
+
+  hittable_list->Add(s1);
+  hittable_list->Add(s2);
+  hittable_list->Add(s3);
+  hittable_list->Add(s4);  
+
+  // Camera definitions
+  Vector3D look_at = Vector3D(0, 0, 1);
+
+  Camera* camera = new Camera(look_from, look_at, vertical_fov, aspectRatio); 
+
+  return std::make_pair(hittable_list, camera);
+}
+
+std::pair<Hittables*, Camera*> Scene3(double aspectRatio) {
   // Define hittable objects
+  Hittables* hittable_list = new Hittables();
 
-  Hittables hittable_list;
+  Lambertian* t_red = new Lambertian(Color(0.8, 0, 0));
+  Lambertian* t_blue = new Lambertian(Color(0, 0, 0.8));
+  Lambertian* t_green = new Lambertian(Color(0, 0.8, 0));
 
-  Lambertian t_mat(Color(1, 0, 0));
-  Triangle t = Triangle(Vector3D(-0.5, 0.5, -1), Vector3D(0, 1.5, -1), Vector3D(0.5, 0.5, -1), &t_mat);
+  Triangle* t = new Triangle(Vector3D(-0.5, 0.5, -1), Vector3D(0, 1.5, -1), Vector3D(0.5, 0.5, -1), t_red);
+  Triangle* t2 = new Triangle(Vector3D(-0.5, 0.5, -2), Vector3D(0, 1.5, -1), Vector3D(0.5, 0.5, -1), t_blue);
+  Triangle* t3 = new Triangle(Vector3D(-0.5, 0.5, -2), Vector3D(0, 1.5, -1), Vector3D(-0.5, 0.5, -1), t_green);
 
-  Lambertian ground(Color(0.8, 0.8, 0));
-  // Lambertian center(Color(0.1, 0.2, 0.5));
-  // Lambertian left(Color(0.1, 0.3, 0.5));
-  Metal right(Color(0.8, 0.6, 0.2));
+  Lambertian* ground = new Lambertian(Color(0.8, 0.8, 0));
+  Metal* right = new Metal(Color(0.8, 0.6, 0.2));
 
-  Sphere s1 = Sphere(Vector3D(0.0, -100.5, -1.0), 100.0, &ground);
-  // Sphere s2 = Sphere(Vector3D(0.0, 0.0, 1.0), 0.5, &center);
-  // Sphere s3 = Sphere(Vector3D(-1.0, 0.0, 1.0), 0.5, &left);
-  Sphere s4 = Sphere(Vector3D(0.0, 0.0, -0.1), 0.5, &right);
+  Sphere* s1 = new Sphere(Vector3D(0.0, -100.5, -1.0), 100.0, ground);
+  Sphere* s2 = new Sphere(Vector3D(0.9, 0.0, -0.5), 0.5, right);
 
-  hittable_list.Add(&s1);
-  // hittable_list.Add(&s2);
-  // hittable_list.Add(&s3);
-  hittable_list.Add(&s4);   
+  hittable_list->Add(s1);
+  hittable_list->Add(s2);   
+  hittable_list->Add(t);
+  hittable_list->Add(t2);
+  hittable_list->Add(t3);
 
-  // hittable_list.Add(&ground_sphere);
-  hittable_list.Add(&t);
-
-  // for (int i = -12; i < 12; ++i) {
-  //   for (int j = -12; j < 12; ++j) {
-  //     double choose_mat = random_double();
-  //     Vector3D center(i + 0.9 * random_double(), 0.2, j + 0.9 * random_double());
-
-  //     if ((center - Vector3D(4, 0.2, 0)).Magnitude() > 0.9) {
-
-  //         if (choose_mat < 0.65) {
-  //             // diffuse
-  //             Vector3D albedo = Vector3D::random() * Vector3D::random();
-  //             Lambertian* sphere_material = new Lambertian(albedo);
-  //             Sphere* s = new Sphere(center, 0.2, sphere_material);
-  //             hittable_list.Add(s);
-  //         } else {
-  //             // metal
-  //             Vector3D albedo = Vector3D::random(0.5, 1);
-  //             Metal* sphere_material = new Metal(albedo);
-  //             Sphere* s = new Sphere(center, 0.2, sphere_material);
-  //             hittable_list.Add(s);
-  //         }
-  //     }
-  //   }
-  // }
-
-  // Metal center_material = Metal(Vector3D(0.7, 0.6, 0.5));
-  // Sphere center_sphere = Sphere(Vector3D(0, 1, 0), 1.0, &center_material);
-  // hittable_list.Add(&center_sphere);
 
   // Camera definitions
   double vertical_fov = 120;
   Vector3D look_from = Vector3D(0, 0, 1);
   Vector3D look_at = Vector3D(0, 0, -1);
 
-  Camera camera = Camera(look_from, look_at, vertical_fov, aspectRatio);
+  Camera* camera = new Camera(look_from, look_at, vertical_fov, aspectRatio);
+
+  return std::make_pair(hittable_list, camera);
+}
+
+
+int main(int argc, char *argv[]) {
+  // //NOTE: this sample will overwrite the file or test.png without warning!
+  const char* filename = argc > 1 ? argv[1] : "test.png";
+  size_t height = argc > 2 ? atoi(argv[2]) : 225;
+  size_t width = argc > 3 ? atoi(argv[3]) : 440;
+
+  std::vector<std::vector<Color>> image;
+  double aspectRatio = width / (double) height;
+  
+  auto settings = Scene2(aspectRatio, Vector3D(0, 0, -1), 120);
+  // auto settings = Scene2(aspectRatio, Vector3D(4, 2, -3), 40);
+  // filename = "zoom.png";
+  // auto settings = Scene3(aspectRatio);
+  // auto settings = Scene1(aspectRatio);
+
+
+  Hittables* world = settings.first;
+  Camera* camera = settings.second;
 
   int depth = 50;
 
@@ -108,8 +168,8 @@ int main(int argc, char *argv[]) {
       for (int s = 0; s < 10; s++) {
         auto u = (j + random_double()) / (width);
         auto v = (height - i + random_double()) / (height);
-        Ray r = camera.GetRayAt(u, v);
-        pixel_color += output(r, hittable_list, depth) / 10;
+        Ray r = camera->GetRayAt(u, v);
+        pixel_color += output(r, *world, depth) / 10;
       }
       row.push_back(pixel_color * 255);
 
