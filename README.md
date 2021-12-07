@@ -24,6 +24,13 @@ where filename (string), height (pixels), width (pixels), and scene_number (int)
 
 We currently have implemented Spheres and Triangle objects. We also provide a Lambertian and Metal material for each object. To define both, see the example below.
 
+Here are some more scenes we created with our Ray Tracer:
+
+
+![simple scene](/scenes/simple_scene.png)
+![simple scene zoomed](/scenes/simple_scene_zoomed.png)
+![cursed scene](/scenes/cursed.png)
+
 ```
 Metal* center_material = new Metal(Vector3D(0.7, 0.6, 0.5)); //defines a material
 Sphere* center_sphere = new Sphere(Vector3D(0, 1, 0), 1.0, center_material); //defines a sphere
