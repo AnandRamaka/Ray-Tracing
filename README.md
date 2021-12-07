@@ -5,9 +5,33 @@ Our project is a Raytracer written in modern C++. Our motivation for this projec
 
 ## Building
 
-To build the project, run `make exec`
+To build the project:
+
+```
+make exec
+```
 
 ## Usage
 
+To run the project with the pre-existing scenes, you can run,
+
+```
+bin/exec <filename> <height> <width>
+```
+where filename (string), height (pixels), and width (pixels) are optional parameters.
+
+If you wish to build a different scene, modify the objects and materials in `src/main.cc.`
 
 ## Test Suite
+
+To run all of our tests:
+
+```
+make tests
+```
+
+To run an individual test:
+
+```
+make <test_name>
+```
