@@ -37,3 +37,10 @@ To run an individual test:
 ```
 make <test_name>
 ```
+
+## Resources
+
+For handling a lot of the math in our project, we referenced the following textbooks on Ray Tracing:
+
+- [Ray Tracing in One Weekend](https://raytracing.github.io)
+- [Ray Tracing: Rendering a Triangle](https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution)
