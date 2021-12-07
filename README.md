@@ -39,6 +39,9 @@ Here are some more scenes we created with our Ray Tracer:
 
 ![simple scene](/scenes/simple_scene.png)
 ![simple scene zoomed](/scenes/simple_scene_zoomed.png)
+
+Here is a cursed scene :)
+
 ![cursed scene](/scenes/cursed.png)
 
 ## Test Suite
