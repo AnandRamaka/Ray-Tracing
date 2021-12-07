@@ -31,7 +31,7 @@ Color output(const Ray& r, const Hittables& hittable, int depth) {
   return (1 - t) * Color(1, 1, 1) + t * Color(0.5, 0.7, 1.0);
 }
 
-std::pair<Hittables*, Camera*> Scene1(double aspectRatio) {
+std::pair<Hittables*, Camera*> LargeScene(double aspectRatio) {
   Hittables* hittable_list = new Hittables();
 
   for (int i = -12; i < 12; ++i) {
@@ -78,7 +78,7 @@ std::pair<Hittables*, Camera*> Scene1(double aspectRatio) {
   return std::make_pair(hittable_list, camera);
 }
 
-std::pair<Hittables*, Camera*> Scene2(double aspectRatio, Vector3D look_from, double vertical_fov) {
+std::pair<Hittables*, Camera*> SimpleScene(double aspectRatio, Vector3D look_from, double vertical_fov) {
   Hittables* hittable_list = new Hittables();
 
   Lambertian* ground = new Lambertian(Color(0.8, 0.8, 0));
@@ -104,7 +104,7 @@ std::pair<Hittables*, Camera*> Scene2(double aspectRatio, Vector3D look_from, do
   return std::make_pair(hittable_list, camera);
 }
 
-std::pair<Hittables*, Camera*> Scene3(double aspectRatio) {
+std::pair<Hittables*, Camera*> TriangleScene(double aspectRatio) {
   // Define hittable objects
   Hittables* hittable_list = new Hittables();
 
@@ -142,19 +142,32 @@ std::pair<Hittables*, Camera*> Scene3(double aspectRatio) {
 
 int main(int argc, char *argv[]) {
   // //NOTE: this sample will overwrite the file or test.png without warning!
-  const char* filename = argc > 1 ? argv[1] : "test.png";
+
+  const char* filename = argc > 1 ? argv[1] : "scene.png";
   size_t height = argc > 2 ? atoi(argv[2]) : 225;
   size_t width = argc > 3 ? atoi(argv[3]) : 440;
+  size_t chosen_scene = argc > 4 ? atoi(argv[4]) : 1;
 
   std::vector<std::vector<Color>> image;
   double aspectRatio = width / (double) height;
   
-  auto settings = Scene2(aspectRatio, Vector3D(0, 0, -1), 120);
-  // auto settings = Scene2(aspectRatio, Vector3D(4, 2, -3), 40);
-  // filename = "zoom.png";
-  // auto settings = Scene3(aspectRatio);
-  // auto settings = Scene1(aspectRatio);
+  /* Specify which scene you want to generate.
+     You can also provide your own creating a Hittable object.
+   */
 
+  std::pair<Hittables*, Camera*> settings;
+
+  if (chosen_scene == 2) {
+    settings = SimpleScene(aspectRatio, Vector3D(4, 2, -3), 40);
+  } else if (chosen_scene == 3) {
+    settings = TriangleScene(aspectRatio);
+  } else if (chosen_scene == 4) {
+    settings = LargeScene(aspectRatio);
+  } else {
+    settings = SimpleScene(aspectRatio, Vector3D(0, 0, -1), 120);
+  }
+
+  /* Produces ray traced image */
 
   Hittables* world = settings.first;
   Camera* camera = settings.second;
