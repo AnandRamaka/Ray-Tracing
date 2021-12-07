@@ -1,5 +1,9 @@
-# Ray Tracer in C++
-## CS 128 Fall 2021 Final Project
+<h1 align="center">
+  Ray Tracer in C++
+</h1>
+
+
+<h4 align="center">CS 128 Fall 2021 Final Project</h4>
 
 ![best ray traced scene](/scenes/many_spheres_1920x1080.png)
 
