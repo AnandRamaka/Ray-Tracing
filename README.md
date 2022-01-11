@@ -3,7 +3,7 @@
 </h1>
 
 
-<h4 align="center">CS 128 Fall 2021 Final Group Project</h4>
+<h4 align="center">CS 128 Final Group Project</h4>
 
 ![best ray traced scene](/scenes/many_spheres_1920x1080.png)
 
